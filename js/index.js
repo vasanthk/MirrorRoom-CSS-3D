@@ -1,15 +1,18 @@
-!function () {
+(function () {
     window.addEventListener('load', function () {
         "use strict";
-        var Xi = 0, Yi = 0, Zi = 0, rotation;
-        var faces, localTransform = [];
-        var screen = ge1doot.screen;
-        var drag = ge1doot.drag;
-        var perp = new ge1doot.Ease(0.01, 50);
-        // ==== init script ====
+        var rotation,
+            faces,
+            localTransform = [],
+            screen = animate3d.screen,
+            drag = animate3d.drag,
+            perp = new animate3d.Ease(0.01, 50);
+
+        // Init Screen
         screen.init("screen", function () {
         }, true);
         drag.init(screen);
+
         faces = document.getElementById("scene").getElementsByTagName("img");
         rotation = {
             ex: 0,
@@ -51,8 +54,9 @@
                 this.ttz = -(Math.sin((this.y - 90) * Math.PI / 180) * a) * 400;
                 this.tty = Math.sin(this.x * Math.PI / 180) * 100;
             }
-        }
-        // ==== init faces ====
+        };
+
+        // Init Room faces
         for (var i = 0, n = faces.length; i < n; i++) {
             var elem = faces[i];
             var s = elem.getAttribute("data-transform");
@@ -61,7 +65,8 @@
             elem.style.visibility = "visible";
             localTransform.push(s);
         }
-        // ==== main loop ====
+
+        // Main running loop
         function run() {
             requestAnimationFrame(run);
             perp.ease(drag.active ? 300 : 500);
@@ -69,7 +74,8 @@
             if (drag.y < -270) drag.y = drag.by = -270;
             rotation.ease(drag.x, drag.y);
             var globalRotation = "perspective(" + perp.value + "px) rotateX(" + rotation.x + "deg) " + "rotateY(" + rotation.y + "deg) translateX(" + (rotation.tx + rotation.ttx) + "px) translateY(" + rotation.tty + "px) translateZ(" + (rotation.tz + rotation.ttz) + "px)";
-            // ==== anim faces ====
+
+            // Animate room faces
             for (var i = 0, n = faces.length; i < n; i++) {
                 var elem = faces[i];
                 var s = globalRotation + localTransform[i];
@@ -78,7 +84,7 @@
             }
         }
 
-        // ==== start animation ====
+        // Get.. Set.. Go.. Animate!
         requestAnimationFrame(run);
     }, false);
-}();
+})();

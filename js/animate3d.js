@@ -15,12 +15,12 @@ var animate3d = animate3d || {
                 initRes && this.resize();
             },
             resize: function () {
-                var o = this.elem;
-                this.width = o.offsetWidth;
-                this.height = o.offsetHeight;
-                for (this.left = 0, this.top = 0; o != null; o = o.offsetParent) {
-                    this.left += o.offsetLeft;
-                    this.top += o.offsetTop;
+                var elem = this.elem;
+                this.width = elem.offsetWidth;
+                this.height = elem.offsetHeight;
+                for (this.left = 0, this.top = 0; elem != null; elem = elem.offsetParent) {
+                    this.left += elem.offsetLeft;
+                    this.top += elem.offsetTop;
                 }
                 this.callback && this.callback();
             }
@@ -65,21 +65,21 @@ var animate3d = animate3d || {
                 var self = this;
                 this.screen = screen.elem;
                 if ('ontouchstart' in window) {
-                    // touch
+                    // Touch events
                     this.screen.ontouchstart = function (e) {
                         self.down(e, true);
-                    }
+                    };
                     this.screen.ontouchmove = function (e) {
                         self.move(e, true);
-                    }
+                    };
                     this.screen.ontouchend = function (e) {
                         self.up(e, true);
-                    }
+                    };
                     this.screen.ontouchcancel = function (e) {
                         self.up(e, true);
-                    }
+                    };
                 }
-                // mouse
+                // Mouse events
                 document.addEventListener("mousedown", function (e) {
                     self.down(e, false);
                 }, true);
@@ -93,11 +93,10 @@ var animate3d = animate3d || {
         },
         Ease: function (speed, val) {
             this.speed = speed;
-            this.target = val;
             this.value = val;
         }
-    }
+    };
 
 animate3d.Ease.prototype.ease = function (target) {
     this.value += (target - this.value) * this.speed;
-}
+};
